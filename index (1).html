@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="theme-color" content="#a8dadc" />
+<title>个人成长工作台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Noto+Sans+SC:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<!-- 韩式装饰背景层：磨砂柔光 + 波点 + 蕾丝边缘 -->
+<div class="bg-deco">
+  <div class="bg-blob bg-blob-1"></div>
+  <div class="bg-blob bg-blob-2"></div>
+  <div class="bg-blob bg-blob-3"></div>
+  <div class="bg-dots"></div>
+  <svg class="bg-lace-top" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,30 Q30,0 60,30 T120,30 T180,30 T240,30 T300,30 T360,30 T420,30 T480,30 T540,30 T600,30 T660,30 T720,30 T780,30 T840,30 T900,30 T960,30 T1020,30 T1080,30 T1140,30 T1200,30 L1200,60 L0,60 Z" fill="rgba(255,255,255,0.55)"/>
+  </svg>
+  <svg class="bg-lace-bottom" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,30 Q30,60 60,30 T120,30 T180,30 T240,30 T300,30 T360,30 T420,30 T480,30 T540,30 T600,30 T660,30 T720,30 T780,30 T840,30 T900,30 T960,30 T1020,30 T1080,30 T1140,30 T1200,30 L1200,0 L0,0 Z" fill="rgba(255,255,255,0.45)"/>
+  </svg>
+</div>
+
+<div class="app">
+  <!-- 顶部 / 仪表盘 -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 64 64" width="44" height="44" aria-hidden="true">
+          <!-- 蛋糕底盘 -->
+          <ellipse cx="32" cy="48" rx="22" ry="4" fill="#8b6f47" opacity="0.85"/>
+          <!-- 蛋糕体（巧克力层） -->
+          <path d="M12 32 Q32 22 52 32 L52 46 Q32 52 12 46 Z" fill="#a87b5a"/>
+          <!-- 奶油层 -->
+          <path d="M12 30 Q32 22 52 30 Q52 26 32 18 Q12 26 12 30 Z" fill="#fff8ee"/>
+          <!-- 巧克力淋面 -->
+          <path d="M14 32 Q22 28 30 32 Q38 36 46 31 Q52 28 52 32 L52 36 Q42 40 32 36 Q22 32 14 36 Z" fill="#6b4f35"/>
+          <!-- 樱桃 -->
+          <circle cx="32" cy="20" r="4" fill="#f4a8b8"/>
+          <path d="M32 16 Q34 12 36 14" stroke="#7ba89a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <!-- 薄荷叶 -->
+          <ellipse cx="22" cy="22" rx="3" ry="2" fill="#a8dadc" transform="rotate(-25 22 22)"/>
+          <ellipse cx="40" cy="24" rx="3" ry="2" fill="#a8dadc" transform="rotate(30 40 24)"/>
+        </svg>
+      </div>
+      <div>
+        <h1>个人成长工作台</h1>
+        <div class="today" id="todayDate"></div>
+      </div>
+    </div>
+    <button class="icon-btn" id="toggleAllBtn" title="展开/折叠全部">⤵︎</button>
+  </header>
+
+  <!-- 仪表盘卡片 -->
+  <section class="dashboard">
+    <div class="card-mini" data-target="cet">
+      <div class="card-mini-title">四六级备考</div>
+      <div class="card-mini-value" id="dashCetDays">-- 天</div>
+      <div class="card-mini-sub" id="dashCetProgress">完成度 0%</div>
+    </div>
+    <div class="card-mini" data-target="exam">
+      <div class="card-mini-title">考试准备</div>
+      <div class="card-mini-value" id="dashExamCount">0 场</div>
+      <div class="card-mini-sub" id="dashExamNearest">最近 --</div>
+    </div>
+    <div class="card-mini" data-target="weight">
+      <div class="card-mini-title">减肥计划</div>
+      <div class="card-mini-value" id="dashWeight">-- kg</div>
+      <div class="card-mini-sub" id="dashWeightGoal">目标 55 kg</div>
+    </div>
+    <div class="card-mini" data-target="weekly">
+      <div class="card-mini-title">AI 每周复盘</div>
+      <div class="card-mini-value" id="dashWeeklyCount">0 周</div>
+      <div class="card-mini-sub" id="dashWeeklyStatus">未生成</div>
+    </div>
+  </section>
+
+  <!-- 模块 1：四六级 -->
+  <section class="module" id="module-cet">
+    <header class="module-header" data-collapse="cet">
+      <h2>📚 四六级备考</h2>
+      <div class="module-meta">
+        <span id="cetCountdown" class="countdown">-- 天</span>
+        <span class="collapse-icon">▾</span>
+      </div>
+    </header>
+    <div class="module-body" id="body-cet">
+
+      <!-- 目标分数 -->
+      <div class="cet-goal-bar">
+        <div class="cgb-text">
+          <span class="cgb-label">目标分数</span>
+          <span class="cgb-value" id="cetGoalDisplay">-- 分</span>
+        </div>
+        <div class="cgb-actions">
+          <button class="btn-mini" id="editCetGoalBtn">设置</button>
+        </div>
+      </div>
+
+      <!-- AI 分析 -->
+      <details class="ai-panel" id="cetAIPanel" open>
+        <summary>🤖 AI 分数分析</summary>
+        <div class="ai-content" id="cetAIContent">
+          <div class="ai-empty">先设置目标分数并录入数据，AI 才会出分析。</div>
+        </div>
+      </details>
+
+      <!-- A 类 -->
+      <div class="cet-block cet-a">
+        <div class="cet-block-head">
+          <span class="cet-tag tag-a">A 类 · 量化</span>
+          <h3>听力 / 阅读</h3>
+          <span class="cet-stat" id="cetAStat">本周平均 --%</span>
+        </div>
+        <form class="cet-add" id="cetAAddForm">
+          <div class="cet-add-grid">
+            <select id="cetAType" required>
+              <option value="听力">听力</option>
+              <option value="阅读">阅读</option>
+            </select>
+            <input type="number" id="cetACount" placeholder="题数" min="1" required />
+            <input type="number" id="cetARight" placeholder="正确数" min="0" required />
+            <input type="date" id="cetADate" required />
+          </div>
+          <button type="submit" class="btn-primary">记录今日</button>
+        </form>
+        <div class="cet-list" id="cetAList"></div>
+      </div>
+
+      <!-- B 类 -->
+      <div class="cet-block cet-b">
+        <div class="cet-block-head">
+          <span class="cet-tag tag-b">B 类 · 完成量</span>
+          <h3>作文 / 翻译</h3>
+          <span class="cet-stat" id="cetBStat">本周 0 篇</span>
+        </div>
+        <form class="cet-add" id="cetBAddForm">
+          <div class="cet-add-grid">
+            <select id="cetBType" required>
+              <option value="作文">作文</option>
+              <option value="翻译">翻译</option>
+            </select>
+            <input type="number" id="etBCount" placeholder="篇数" min="1" required />
+            <input type="date" id="cetBDate" required />
+          </div>
+          <button type="submit" class="btn-primary">记录今日</button>
+        </form>
+        <div class="cet-list" id="cetBList"></div>
+      </div>
+
+      <!-- AI 批改：作文/翻译 -->
+      <details class="ai-panel" id="cetGradePanel">
+        <summary>🤖 AI 作文 / 翻译批改</summary>
+        <div class="ai-content">
+          <form id="gradeForm" class="grade-form">
+            <div class="form-row">
+              <label>类型</label>
+              <select id="gradeType" required>
+                <option value="作文">作文</option>
+                <option value="翻译">翻译</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>原文（粘贴或上传图片）</label>
+              <textarea id="gradeText" rows="6" maxlength="2000" placeholder="粘贴你写的英文…"></textarea>
+            </div>
+            <div class="form-row grade-upload-row">
+              <label class="file-btn">
+                📷 上传图片自动识别（OCR）
+                <input type="file" id="gradeImage" accept="image/*" hidden />
+              </label>
+              <span class="file-status" id="gradeOcrStatus"></span>
+              <button type="button" class="btn-mini" id="clearOcrBtn" style="display:none;">清除识别结果</button>
+            </div>
+            <button type="submit" class="btn-primary">🤖 AI 批改</button>
+          </form>
+
+          <div class="grade-result" id="gradeResult"></div>
+
+          <h4 class="section-subtitle">批改记录</h4>
+          <div class="grade-history" id="gradeHistory"></div>
+        </div>
+      </details>
+
+      <!-- 自定义任务 -->
+      <details class="add-task-wrap">
+        <summary>＋ 自定义其他任务（背单词/复盘等）</summary>
+        <form class="add-form" id="cetAddForm" style="margin-top:8px;">
+          <input type="text" id="cetNewTask" placeholder="任务名…" maxlength="40" required />
+          <button type="submit" class="btn-primary">添加</button>
+        </form>
+        <div class="task-list" id="cetTaskList" style="margin-top:8px;"></div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- 模块 2：考试准备 -->
+  <section class="module" id="module-exam">
+    <header class="module-header" data-collapse="exam">
+      <h2>📝 考试准备</h2>
+      <div class="module-meta">
+        <span id="examTotal">0 场</span>
+        <span class="collapse-icon">▾</span>
+      </div>
+    </header>
+    <div class="module-body" id="body-exam">
+      <div id="examList" class="exam-list"></div>
+      <button class="btn-add-exam" id="addExamBtn">+ 添加考试</button>
+    </div>
+  </section>
+
+  <!-- 模块 3：减肥计划 -->
+  <section class="module" id="module-weight">
+    <header class="module-header" data-collapse="weight">
+      <h2>🏃‍♀️ 减肥计划</h2>
+      <div class="module-meta">
+        <span class="collapse-icon">▾</span>
+      </div>
+    </header>
+    <div class="module-body" id="body-weight">
+      <div class="weight-summary">
+        <div class="weight-stat">
+          <div class="label">目标</div>
+          <div class="value">55 kg<br><small>2027-01-10</small></div>
+        </div>
+        <div class="weight-stat">
+          <div class="label">起始</div>
+          <div class="value">69.3 kg<br><small>9月14日</small></div>
+        </div>
+        <div class="weight-stat">
+          <div class="label">当前</div>
+          <div class="value" id="weightCurrent">--</div>
+        </div>
+        <div class="weight-stat">
+          <div class="label">剩余</div>
+          <div class="value" id="weightRemain">--</div>
+        </div>
+        <div class="weight-stat">
+          <div class="label">倒计时</div>
+          <div class="value" id="weightCountdown">--</div>
+        </div>
+      </div>
+
+      <div class="weight-chart-wrap">
+        <div class="chart-header"><h3>每周体重趋势（起点→终点）</h3></div>
+        <canvas id="weightChart" width="600" height="240"></canvas>
+      </div>
+
+      <!-- 本周周记录 -->
+      <div class="weight-week-card" id="weightWeekCard">
+        <div class="week-card-head">
+          <div>
+            <div class="week-card-title" id="weekCardTitle">本周</div>
+            <div class="week-card-dates" id="weekCardDates">-- → --</div>
+          </div>
+          <div class="week-card-status" id="weekCardStatus">待填写</div>
+        </div>
+
+        <div class="dual-weight">
+          <div class="dw-block">
+            <div class="dw-label">周一 <span id="dwMonDate">--</span></div>
+            <div class="dw-name">起始体重</div>
+            <input type="number" step="0.1" id="wwStartWeight" placeholder="kg" />
+          </div>
+          <div class="dw-arrow">→</div>
+          <div class="dw-block">
+            <div class="dw-label">周日 <span id="dwSunDate">--</span></div>
+            <div class="dw-name">最终体重</div>
+            <input type="number" step="0.1" id="wwEndWeight" placeholder="kg" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>本周运动次数</label>
+          <input type="number" id="wwExercise" min="0" placeholder="例如 4" />
+        </div>
+        <div class="form-row">
+          <label>饮食自评</label>
+          <div class="rating-group" id="wwRatingGroup">
+            <button type="button" data-val="好">好</button>
+            <button type="button" data-val="中">中</button>
+            <button type="button" data-val="差">差</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>下周一个微调</label>
+          <input type="text" id="wwTweak" maxlength="60" placeholder="例如：少喝奶茶" />
+        </div>
+        <button type="submit" class="btn-primary" id="wwSubmitBtn">保存本周</button>
+      </div>
+
+      <h3 class="section-title">历史周复盘</h3>
+      <div id="weeklyWeightList" class="weekly-list"></div>
+    </div>
+  </section>
+
+  <!-- 模块 4：AI 每周复盘 -->
+  <section class="module" id="module-weekly">
+    <header class="module-header" data-collapse="weekly">
+      <h2>🤖 AI 每周复盘</h2>
+      <div class="module-meta">
+        <span id="weeklyTotal">0 周</span>
+        <span class="collapse-icon">▾</span>
+      </div>
+    </header>
+    <div class="module-body" id="body-weekly">
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div>
+            <div class="ai-card-title">本周自动复盘</div>
+            <div class="ai-card-sub" id="aiWeekRange">-- → --</div>
+          </div>
+          <button class="btn-primary" id="genWeeklyBtn">✨ 生成本周复盘</button>
+        </div>
+        <div class="ai-result" id="aiWeeklyResult">
+          <div class="ai-empty">点击右上「生成本周复盘」，AI 会根据你本周上传的所有数据自动总结。</div>
+        </div>
+      </div>
+
+      <h3 class="section-title">历史 AI 复盘</h3>
+      <div id="weeklyReviewList" class="weekly-list"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <small>数据自动保存在浏览器本地 · v1.2 · AI 由本地规则引擎生成</small>
+  </footer>
+</div>
+
+<!-- 目标分数弹窗 -->
+<div class="modal" id="goalModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>设置四六级目标分数</h3>
+      <button class="close-btn" id="goalModalClose">×</button>
+    </div>
+    <form id="goalForm">
+      <div class="form-row">
+        <label>目标分数（425=及格，500=良好，600=优秀，650=高分）</label>
+        <input type="number" id="goalInput" min="0" max="710" required />
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="goalModalCancel">取消</button>
+        <button type="submit" class="btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 添加考试弹窗 -->
+<div class="modal" id="examModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="examModalTitle">添加考试</h3>
+      <button class="close-btn" id="examModalClose">×</button>
+    </div>
+    <form id="examForm">
+      <input type="hidden" id="examEditId" />
+      <div class="form-row">
+        <label>考试名称</label>
+        <input type="text" id="examName" maxlength="30" required />
+      </div>
+      <div class="form-row">
+        <label>考试日期</label>
+        <input type="date" id="examDate" />
+      </div>
+      <div class="form-row">
+        <label>报名提醒日期</label>
+        <input type="date" id="examSignDate" />
+      </div>
+      <div class="form-row">
+        <label>备注</label>
+        <textarea id="examNote" rows="2" maxlength="120"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="examModalCancel">取消</button>
+        <button type="submit" class="btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- OCR 加载提示 -->
+<div id="ocrLoader" class="ocr-loader" style="display:none;">
+  <div class="ocr-loader-inner">
+    <div class="spinner"></div>
+    <div>首次使用 OCR 正在加载识别引擎（约 13MB）…</div>
+    <div class="ocr-sub" id="ocrLoaderSub">0%</div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
