@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="format-detection" content="telephone=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="theme-color" content="#a8dadc" />
@@ -13,7 +14,7 @@
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<!-- 韩式装饰背景层：磨砂柔光 + 波点 + 蕾丝边缘 -->
+<!-- 韩式装饰背景层 -->
 <div class="bg-deco">
   <div class="bg-blob bg-blob-1"></div>
   <div class="bg-blob bg-blob-2"></div>
@@ -27,24 +28,43 @@
   </svg>
 </div>
 
+<!-- 侧边导航 -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-logo">
+      <svg viewBox="0 0 64 64" width="36" height="36" aria-hidden="true">
+        <ellipse cx="32" cy="48" rx="22" ry="4" fill="#8b6f47" opacity="0.85"/>
+        <path d="M12 32 Q32 22 52 32 L52 46 Q32 52 12 46 Z" fill="#a87b5a"/>
+        <path d="M12 30 Q32 22 52 30 Q52 26 32 18 Q12 26 12 30 Z" fill="#fff8ee"/>
+        <path d="M14 32 Q22 28 30 32 Q38 36 46 31 Q52 28 52 32 L52 36 Q42 40 32 36 Q22 32 14 36 Z" fill="#6b4f35"/>
+        <circle cx="32" cy="20" r="4" fill="#f4a8b8"/>
+        <ellipse cx="22" cy="22" rx="3" ry="2" fill="#a8dadc" transform="rotate(-25 22 22)"/>
+        <ellipse cx="40" cy="24" rx="3" ry="2" fill="#a8dadc" transform="rotate(30 40 24)"/>
+      </svg>
+    </div>
+    <button class="sidebar-close" id="sidebarClose" aria-label="关闭菜单">×</button>
+  </div>
+  <nav class="sidebar-nav" id="sidebarNav">
+    <!-- 动态生成 -->
+  </nav>
+</aside>
+<div class="sidebar-mask" id="sidebarMask"></div>
+
 <div class="app">
   <!-- 顶部 / 仪表盘 -->
   <header class="topbar">
+    <button class="hamburger" id="hamburgerBtn" aria-label="打开菜单">
+      <span></span><span></span><span></span>
+    </button>
     <div class="brand">
       <div class="logo">
         <svg viewBox="0 0 64 64" width="44" height="44" aria-hidden="true">
-          <!-- 蛋糕底盘 -->
           <ellipse cx="32" cy="48" rx="22" ry="4" fill="#8b6f47" opacity="0.85"/>
-          <!-- 蛋糕体（巧克力层） -->
           <path d="M12 32 Q32 22 52 32 L52 46 Q32 52 12 46 Z" fill="#a87b5a"/>
-          <!-- 奶油层 -->
           <path d="M12 30 Q32 22 52 30 Q52 26 32 18 Q12 26 12 30 Z" fill="#fff8ee"/>
-          <!-- 巧克力淋面 -->
           <path d="M14 32 Q22 28 30 32 Q38 36 46 31 Q52 28 52 32 L52 36 Q42 40 32 36 Q22 32 14 36 Z" fill="#6b4f35"/>
-          <!-- 樱桃 -->
           <circle cx="32" cy="20" r="4" fill="#f4a8b8"/>
           <path d="M32 16 Q34 12 36 14" stroke="#7ba89a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-          <!-- 薄荷叶 -->
           <ellipse cx="22" cy="22" rx="3" ry="2" fill="#a8dadc" transform="rotate(-25 22 22)"/>
           <ellipse cx="40" cy="24" rx="3" ry="2" fill="#a8dadc" transform="rotate(30 40 24)"/>
         </svg>
@@ -58,7 +78,7 @@
   </header>
 
   <!-- 仪表盘卡片 -->
-  <section class="dashboard">
+  <section class="dashboard" id="dashboard">
     <div class="card-mini" data-target="cet">
       <div class="card-mini-title">四六级备考</div>
       <div class="card-mini-value" id="dashCetDays">-- 天</div>
@@ -82,7 +102,7 @@
   </section>
 
   <!-- 模块 1：四六级 -->
-  <section class="module" id="module-cet">
+  <section class="module" id="module-cet" data-builtin="cet">
     <header class="module-header" data-collapse="cet">
       <h2>📚 四六级备考</h2>
       <div class="module-meta">
@@ -92,8 +112,7 @@
     </header>
     <div class="module-body" id="body-cet">
 
-      <!-- 目标分数 -->
-      <div class="cet-goal-bar">
+      <div class="cet-goal-bar" id="anchor-cet-goal">
         <div class="cgb-text">
           <span class="cgb-label">目标分数</span>
           <span class="cgb-value" id="cetGoalDisplay">-- 分</span>
@@ -103,16 +122,14 @@
         </div>
       </div>
 
-      <!-- AI 分析 -->
-      <details class="ai-panel" id="cetAIPanel" open>
+      <details class="ai-panel" id="anchor-cet-ai" open>
         <summary>🤖 AI 分数分析</summary>
         <div class="ai-content" id="cetAIContent">
           <div class="ai-empty">先设置目标分数并录入数据，AI 才会出分析。</div>
         </div>
       </details>
 
-      <!-- A 类 -->
-      <div class="cet-block cet-a">
+      <div class="cet-block cet-a" id="anchor-cet-a">
         <div class="cet-block-head">
           <span class="cet-tag tag-a">A 类 · 量化</span>
           <h3>听力 / 阅读</h3>
@@ -133,8 +150,7 @@
         <div class="cet-list" id="cetAList"></div>
       </div>
 
-      <!-- B 类 -->
-      <div class="cet-block cet-b">
+      <div class="cet-block cet-b" id="anchor-cet-b">
         <div class="cet-block-head">
           <span class="cet-tag tag-b">B 类 · 完成量</span>
           <h3>作文 / 翻译</h3>
@@ -154,8 +170,7 @@
         <div class="cet-list" id="cetBList"></div>
       </div>
 
-      <!-- AI 批改：作文/翻译 -->
-      <details class="ai-panel" id="cetGradePanel">
+      <details class="ai-panel" id="anchor-cet-grade">
         <summary>🤖 AI 作文 / 翻译批改</summary>
         <div class="ai-content">
           <form id="gradeForm" class="grade-form">
@@ -180,15 +195,12 @@
             </div>
             <button type="submit" class="btn-primary">🤖 AI 批改</button>
           </form>
-
           <div class="grade-result" id="gradeResult"></div>
-
           <h4 class="section-subtitle">批改记录</h4>
           <div class="grade-history" id="gradeHistory"></div>
         </div>
       </details>
 
-      <!-- 自定义任务 -->
       <details class="add-task-wrap">
         <summary>＋ 自定义其他任务（背单词/复盘等）</summary>
         <form class="add-form" id="cetAddForm" style="margin-top:8px;">
@@ -197,12 +209,11 @@
         </form>
         <div class="task-list" id="cetTaskList" style="margin-top:8px;"></div>
       </details>
-
     </div>
   </section>
 
   <!-- 模块 2：考试准备 -->
-  <section class="module" id="module-exam">
+  <section class="module" id="module-exam" data-builtin="exam">
     <header class="module-header" data-collapse="exam">
       <h2>📝 考试准备</h2>
       <div class="module-meta">
@@ -217,7 +228,7 @@
   </section>
 
   <!-- 模块 3：减肥计划 -->
-  <section class="module" id="module-weight">
+  <section class="module" id="module-weight" data-builtin="weight">
     <header class="module-header" data-collapse="weight">
       <h2>🏃‍♀️ 减肥计划</h2>
       <div class="module-meta">
@@ -226,26 +237,11 @@
     </header>
     <div class="module-body" id="body-weight">
       <div class="weight-summary">
-        <div class="weight-stat">
-          <div class="label">目标</div>
-          <div class="value">55 kg<br><small>2027-01-10</small></div>
-        </div>
-        <div class="weight-stat">
-          <div class="label">起始</div>
-          <div class="value">69.3 kg<br><small>9月14日</small></div>
-        </div>
-        <div class="weight-stat">
-          <div class="label">当前</div>
-          <div class="value" id="weightCurrent">--</div>
-        </div>
-        <div class="weight-stat">
-          <div class="label">剩余</div>
-          <div class="value" id="weightRemain">--</div>
-        </div>
-        <div class="weight-stat">
-          <div class="label">倒计时</div>
-          <div class="value" id="weightCountdown">--</div>
-        </div>
+        <div class="weight-stat"><div class="label">目标</div><div class="value">55 kg<br><small>2027-01-10</small></div></div>
+        <div class="weight-stat"><div class="label">起始</div><div class="value">69.3 kg<br><small>9月14日</small></div></div>
+        <div class="weight-stat"><div class="label">当前</div><div class="value" id="weightCurrent">--</div></div>
+        <div class="weight-stat"><div class="label">剩余</div><div class="value" id="weightRemain">--</div></div>
+        <div class="weight-stat"><div class="label">倒计时</div><div class="value" id="weightCountdown">--</div></div>
       </div>
 
       <div class="weight-chart-wrap">
@@ -253,7 +249,6 @@
         <canvas id="weightChart" width="600" height="240"></canvas>
       </div>
 
-      <!-- 本周周记录 -->
       <div class="weight-week-card" id="weightWeekCard">
         <div class="week-card-head">
           <div>
@@ -262,7 +257,6 @@
           </div>
           <div class="week-card-status" id="weekCardStatus">待填写</div>
         </div>
-
         <div class="dual-weight">
           <div class="dw-block">
             <div class="dw-label">周一 <span id="dwMonDate">--</span></div>
@@ -276,7 +270,6 @@
             <input type="number" step="0.1" id="wwEndWeight" placeholder="kg" />
           </div>
         </div>
-
         <div class="form-row">
           <label>本周运动次数</label>
           <input type="number" id="wwExercise" min="0" placeholder="例如 4" />
@@ -302,7 +295,7 @@
   </section>
 
   <!-- 模块 4：AI 每周复盘 -->
-  <section class="module" id="module-weekly">
+  <section class="module" id="module-weekly" data-builtin="weekly">
     <header class="module-header" data-collapse="weekly">
       <h2>🤖 AI 每周复盘</h2>
       <div class="module-meta">
@@ -323,14 +316,22 @@
           <div class="ai-empty">点击右上「生成本周复盘」，AI 会根据你本周上传的所有数据自动总结。</div>
         </div>
       </div>
-
       <h3 class="section-title">历史 AI 复盘</h3>
       <div id="weeklyReviewList" class="weekly-list"></div>
     </div>
   </section>
 
+  <!-- 自定义模块插入点 -->
+  <div id="customModules"></div>
+
+  <!-- 新建模块按钮 -->
+  <button class="btn-add-module" id="addModuleBtn">
+    <span class="plus-icon">＋</span>
+    <span>新建模块</span>
+  </button>
+
   <footer class="footer">
-    <small>数据自动保存在浏览器本地 · v1.2 · AI 由本地规则引擎生成</small>
+    <small>数据自动保存在浏览器本地 · v1.3 · AI 由本地规则引擎生成</small>
   </footer>
 </div>
 
@@ -354,7 +355,7 @@
   </div>
 </div>
 
-<!-- 添加考试弹窗 -->
+<!-- 添加/编辑考试弹窗 -->
 <div class="modal" id="examModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -381,6 +382,104 @@
       </div>
       <div class="modal-actions">
         <button type="button" class="btn-secondary" id="examModalCancel">取消</button>
+        <button type="submit" class="btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 计划条目弹窗（细化版） -->
+<div class="modal" id="planModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="planModalTitle">添加计划</h3>
+      <button class="close-btn" id="planModalClose">×</button>
+    </div>
+    <form id="planForm">
+      <input type="hidden" id="planEditId" />
+      <input type="hidden" id="planExamId" />
+      <div class="form-row">
+        <label>时间（日期或自由文本）</label>
+        <input type="text" id="planTime" maxlength="60" placeholder="例如 2027-03-10 或 第一周 / 周末" required />
+      </div>
+      <div class="form-row">
+        <label>需要做的事项</label>
+        <input type="text" id="planText" maxlength="80" placeholder="例如：完成教育学第三章" required />
+      </div>
+      <div class="form-row">
+        <label>备注（心得、完成情况等，自由文本）</label>
+        <textarea id="planNote" rows="3" maxlength="500" placeholder="例如：复习到一半，重点在教学设计"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="planModalCancel">取消</button>
+        <button type="submit" class="btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 新建模块弹窗 -->
+<div class="modal" id="newModuleModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>新建模块</h3>
+      <button class="close-btn" id="newModuleModalClose">×</button>
+    </div>
+    <form id="newModuleForm">
+      <div class="form-row">
+        <label>模块名称</label>
+        <input type="text" id="nmName" maxlength="20" placeholder="例如：考研英语" required />
+      </div>
+      <div class="form-row">
+        <label>模块图标（emoji）</label>
+        <input type="text" id="nmIcon" maxlength="2" placeholder="例如 🎯" value="🎯" />
+      </div>
+      <div class="form-row">
+        <label>模块类型</label>
+        <div class="nm-types">
+          <label class="nm-type-card">
+            <input type="radio" name="nmType" value="exam" checked />
+            <div class="nm-type-card-body">
+              <div class="nm-type-title">📝 考试型</div>
+              <div class="nm-type-desc">含考试日期、报名提醒、细化计划条目、备注</div>
+            </div>
+          </label>
+          <label class="nm-type-card">
+            <input type="radio" name="nmType" value="cet" />
+            <div class="nm-type-card-body">
+              <div class="nm-type-title">📚 量化型</div>
+              <div class="nm-type-desc">含目标分数、A/B 类任务记录、AI 分析、AI 批改</div>
+            </div>
+          </label>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="newModuleModalCancel">取消</button>
+        <button type="submit" class="btn-primary">创建</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 编辑自定义模块信息弹窗 -->
+<div class="modal" id="editCustomModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>编辑模块</h3>
+      <button class="close-btn" id="editCustomModalClose">×</button>
+    </div>
+    <form id="editCustomForm">
+      <input type="hidden" id="ecmId" />
+      <div class="form-row">
+        <label>模块名称</label>
+        <input type="text" id="ecmName" maxlength="20" required />
+      </div>
+      <div class="form-row">
+        <label>模块图标</label>
+        <input type="text" id="ecmIcon" maxlength="2" />
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="ecmDeleteBtn">删除模块</button>
         <button type="submit" class="btn-primary">保存</button>
       </div>
     </form>
